@@ -1,0 +1,13 @@
+# Fill in your AWS Access Key ID and Secret Access Key
+# http://aws.amazon.com/security-credentials
+development:
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: r/d8gsBxu1OdRV7Sx8uKWaXU8v2r0asjZho16tUz
+
+test:
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: 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
+    
+production:
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: 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

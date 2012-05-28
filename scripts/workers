@@ -1,0 +1,47 @@
+#!/bin/bash
+function start {
+	mkdir -p ./tmp
+	mkdir -p ./tmp/pids
+	
+	echo "Starting the worker processes..."
+	PIDFILE=./tmp/pids/scheduler0.pid BACKGROUND=yes QUEUE=scheduler bundle exec rake resque:work
+	
+	PIDFILE=./tmp/pids/scheduler1.pid BACKGROUND=yes QUEUE=scheduler bundle exec rake resque:work
+	
+	PIDFILE=./tmp/pids/scheduler2.pid BACKGROUND=yes QUEUE=scheduler bundle exec rake resque:work
+	echo "Done"
+}
+
+function stop {
+	echo "Stopping the rescue processes..."
+
+	if [ -f ./tmp/pids/scheduler0.pid ]; then
+		kill -9 `cat ./tmp/pids/scheduler0.pid`
+		rm ./tmp/pids/scheduler0.pid
+	fi
+	
+	if [ -f ./tmp/pids/scheduler1.pid ]; then
+		kill -9 `cat ./tmp/pids/scheduler1.pid`
+		rm ./tmp/pids/scheduler1.pid
+	fi
+	
+	if [ -f ./tmp/pids/scheduler2.pid ]; then
+		kill -9 `cat ./tmp/pids/scheduler2.pid`
+		rm ./tmp/pids/scheduler2.pid
+	fi
+
+	echo "Done"
+}
+
+if [ $1 == 'start' ]; then
+	start
+fi
+
+if [ $1 == 'stop' ]; then
+	stop
+fi
+
+if [ $1 == 'restart' ]; then
+	stop
+	start
+fi
