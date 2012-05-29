@@ -2,7 +2,7 @@ import 'simpledb.rb'
 import 'sqs.rb'
 
 # Schedule a whole bunch of push notifications
-module Schedule_iOS_PushNotifications
+module Schedule_C2DM_PushNotifications
   @queue = :scheduler
   
   # Set the status of the notification in SimpleDB
@@ -17,7 +17,7 @@ module Schedule_iOS_PushNotifications
   # Get the notification record to process
   def self.get_pending_notification(domain,identifier = nil)
     # Look for new notifications that are yet to be scheduled in Amazon Simple DB
-    results = domain.items.where("status = 'pending' AND application_type = ?","ios")
+    results = domain.items.where("status = 'pending' AND application_type = ?","android")
     
     return results.first;
   end
@@ -27,7 +27,7 @@ module Schedule_iOS_PushNotifications
     domain = SimpleDB.get_domain(SimpleDB.domain_for_ios_notification)
   
     unless domain.nil?
-      notification_item = Schedule_iOS_PushNotifications.get_pending_notification(domain)
+      notification_item = Schedule_C2DM_PushNotifications.get_pending_notification(domain)
       
       schedule_identifier = SecureRandom.uuid
       puts "scheduler_id = #{schedule_identifier}"
@@ -36,7 +36,7 @@ module Schedule_iOS_PushNotifications
       unless notification_item.nil?
         
         # Set the scheduler_id in com.apple.notification
-        Schedule_iOS_PushNotifications.set_notification_status(notification_item,"scheduling",schedule_identifier)
+        Schedule_C2DM_PushNotifications.set_notification_status(notification_item,"scheduling",schedule_identifier)
         
         # This is necessary so that Amazon SimpleDB updates their db
         sleep(10)
@@ -77,7 +77,7 @@ module Schedule_iOS_PushNotifications
                 device_tokens << "["
               end
               
-              device_tokens << "#{item.name},"
+              device_tokens << "#{item.attributes['c2dm_registration_id'].values.first},"
               count = count + 1
               
               if count == 50
@@ -114,7 +114,7 @@ module Schedule_iOS_PushNotifications
         end
         
         # After all the records have been scheduled, set the status in com.apple.notification.queues
-        Schedule_iOS_PushNotifications.set_notification_status(notification_item,"scheduled")
+        Schedule_C2DM_PushNotifications.set_notification_status(notification_item,"scheduled")
       end
     end
   end

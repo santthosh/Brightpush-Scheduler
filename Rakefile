@@ -2,7 +2,8 @@ require 'resque/tasks'
 require 'sinatra'
 import 'simpledb.rb'
 import 'sqs.rb'
-import 'schedule_ios_notifications.rb'
+import 'schedule_apns_notifications.rb'
+import 'schedule_c2dm_notifications.rb'
 
 namespace :resque do
   task :setup do
