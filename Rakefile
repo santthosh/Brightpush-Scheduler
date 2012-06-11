@@ -1,5 +1,4 @@
 require 'resque/tasks'
-require 'rspec/core/rake_task'
 require 'sinatra'
 import 'lib/simpledb.rb'
 import 'lib/sqs.rb'
@@ -33,6 +32,8 @@ end
 
 desc "Run specs"
 task :spec do
+  require 'rspec/core/rake_task'
+  
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = './spec/**/*_spec.rb'
   end
