@@ -14,15 +14,17 @@ namespace :resque do
     
     rails_env = ENV['RAILS_ENV'] || 'development'
 
-    if rails_env == 'production'
-      $redis = Redis.new(:host => 'redis.brightpush.in')
-    elsif rails_env == 'staging'
-      $redis = Redis.new(:host => 'redis.brightpushbeta.in')
-    elsuf rails_env == 'test'
-      $redis = Redis.new(:host => 'redis.brightpushalpha.in')
+    if rack_env == 'production'
+      $redis = 'redis.brightpush.in:6379'
+    elsif rack_env == 'staging'
+      $redis = 'redis.brightpushbeta.in:6379'
+    elsif rack_env == 'development'
+      $redis = 'redis.brightpushalpha.in:6379'
     else 
       $redis = 'localhost:6379'
     end
+    
+    puts $redis
     
     # Setup the shared redis server
     Resque.redis = $redis
