@@ -5,13 +5,11 @@ require 'yaml'
 class SimpleDB
   
   def self.domain_for_ios_notification
-    return "com.apple.notifications"
-    # return "in.brightpush.notifications"
+    return config[ENV['RACK_ENV']]["notifications_domain"]
   end
   
   def self.domain_for_ios_notification_queues
-    return "com.apple.notifications.queues"
-    # return "in.brightpush.notifications.queues"
+    return config[ENV['RACK_ENV']]["notifications_queues_domain"]
   end
   
   # Connect to Simple DB
