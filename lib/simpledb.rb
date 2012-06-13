@@ -5,10 +5,12 @@ require 'yaml'
 class SimpleDB
   
   def self.domain_for_ios_notification
+    config = YAML.load_file("config/aws.yml")
     return config[ENV['RACK_ENV']]["notifications_domain"]
   end
   
   def self.domain_for_ios_notification_queues
+    config = YAML.load_file("config/aws.yml")
     return config[ENV['RACK_ENV']]["notifications_queues_domain"]
   end
   
