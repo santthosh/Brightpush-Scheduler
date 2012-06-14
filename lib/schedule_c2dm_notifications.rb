@@ -53,7 +53,7 @@ module Schedule_C2DM_PushNotifications
         environment = notification_item.attributes['environment'].values.first;
         
         if(environment.casecmp("sandbox") == 0)
-          bundle_identifer << ".debug"
+          bundle_identifier << ".debug"
         end
         
         device_domain =  SimpleDB.get_domain(bundle_identifier)
