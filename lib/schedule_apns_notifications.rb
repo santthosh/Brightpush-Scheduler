@@ -54,6 +54,7 @@ module Schedule_APNS_PushNotifications
         
         if(environment == "sandbox")
           bundle_identifer = bundle_identifier + ".debug"
+        end
         
         device_domain =  SimpleDB.get_domain(bundle_identifier)
         active_token_items = device_domain.items.where(:active => true)
