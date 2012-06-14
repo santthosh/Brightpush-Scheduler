@@ -1,6 +1,5 @@
 require 'aws'
 require 'yaml'
-import 'lib/logger.rb'
 
 # Helper class to manage simple_db
 class SimpleDB
@@ -26,10 +25,10 @@ class SimpleDB
     
     begin
     	if domain.exists?
-    		Logger.instance.log("Selecting domain '#{identifier}'")
+    		puts "Selecting domain '#{identifier}'"
     	  return domain
     	else 
-    	  Logger.instance.log("Selected domain '#{identifier}' doesn't exist")
+    	  puts "Selected domain '#{identifier}' doesn't exist"
     	  return nil
     	end
     rescue AWS::SimpleDB::Errors::InvalidParameterValue => e

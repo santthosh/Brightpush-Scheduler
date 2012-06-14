@@ -5,25 +5,21 @@ local:
     notifications_queues_domain: in.localhost.notifications.queues
     access_key_id: AKIAIERRYQXDX7KCTHPQ
     secret_access_key: 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
-    loggly_input: https://logs.loggly.com/inputs/df9e89af-3126-4d0c-98d0-a93b4bfebfef 
 
 development:
     notifications_domain: in.brightpushalpha.notifications
     notifications_queues_domain: in.brightpushalpha.notifications.queues
     access_key_id: AKIAIERRYQXDX7KCTHPQ
     secret_access_key: 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
-    loggly_input: https://logs.loggly.com/inputs/df9e89af-3126-4d0c-98d0-a93b4bfebfef
 
 test:
     notifications_domain: in.brightpushbeta.notifications
     notifications_queues_domain: in.brightpushbeta.notifications
     access_key_id: AKIAIERRYQXDX7KCTHPQ
     secret_access_key: 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
-    loggly_input: https://logs.loggly.com/inputs/df9e89af-3126-4d0c-98d0-a93b4bfebfef
     
 production:
     notifications_domain: in.brightpush.notifications
     notifications_queues_domain: in.brightpush.notifications
     access_key_id: AKIAIERRYQXDX7KCTHPQ
     secret_access_key: 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
-    loggly_input: https://logs.loggly.com/inputs/df9e89af-3126-4d0c-98d0-a93b4bfebfef
