@@ -1,7 +1,7 @@
 require 'aws'
 require 'yaml'
 
-# Helper class to manage simple_db
+# Helper class to manage SQS
 class SQS
   
   # Create an SQS queue

@@ -6,6 +6,7 @@ gem 'aws-sdk'
 gem 'multi_json'
 gem 'rack'
 gem 'rake'
+gem 'logglier'
 
 group :development do
   gem 'capistrano', '2.8.0'
