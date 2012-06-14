@@ -1,6 +1,6 @@
 require 'aws'
 require 'yaml'
-import 'lib/logger'
+import 'lib/logger.rb'
 
 # Helper class to manage simple_db
 class SimpleDB
