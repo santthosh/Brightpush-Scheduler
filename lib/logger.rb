@@ -11,7 +11,7 @@ class Logger
   def initialize
     config = YAML.load_file("config/aws.yml")
     
-    @log = Logglier.new([ENV['RACK_ENV']]["loggly_input"])
+    @log = Logglier.new(config[ENV['RACK_ENV']]["loggly_input"])
   end
   
   def log(msg)
