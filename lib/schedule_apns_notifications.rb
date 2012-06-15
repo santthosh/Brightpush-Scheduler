@@ -73,7 +73,7 @@ module Schedule_APNS_PushNotifications
             queue = SQS.create_queue(queue_identifier)
 
             # add a record in com.apple.notification.queues, set the status to pending
-            queue_item = { :scheduler_id => schedule_identifier,:created => Time.now.iso8601, :updated => Time.now.iso8601, :status => "pending" }
+            queue_item = { :scheduler_id => schedule_identifier, :notification_id => notification_item.item_name ,:created => Time.now.iso8601, :updated => Time.now.iso8601, :status => "pending", :application_type => notification_item.attributes['application_type'].values.first }
        	    queue_domain.items.create queue_identifier,queue_item
        	  
        	    # package these into 50 token chunks
