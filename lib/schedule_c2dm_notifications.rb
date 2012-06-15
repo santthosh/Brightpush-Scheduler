@@ -91,7 +91,7 @@ module Schedule_C2DM_PushNotifications
                 device_tokens << "]"
                 
                 # Add the notification_item.name and item.name to SQS Queue
-                msg = queue.send_message("{'id':'#{notification_item.name}','devices':'#{device_tokens}'}")
+                msg = queue.send_message("#{device_tokens}")
                 print '.'
                 
                 device_tokens = ""
@@ -103,7 +103,7 @@ module Schedule_C2DM_PushNotifications
               device_tokens << "]"
               
               # Add the notification_item.name and item.name to SQS Queue
-              msg = queue.send_message("{'id':'#{notification_item.name}','devices':'#{device_tokens}'}")
+              msg = queue.send_message("#{device_tokens}")
               print '.'
               
               device_tokens = ""
