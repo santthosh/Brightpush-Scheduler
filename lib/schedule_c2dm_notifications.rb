@@ -80,16 +80,10 @@ module Schedule_C2DM_PushNotifications
        	    count = 0
        	    device_tokens = ""
             page.each do |item|
-              if count == 0
-                device_tokens << "["
-              end
-              
               device_tokens << "#{item.attributes['c2dm_registration_id'].values.first},"
               count = count + 1
               
               if count == 50
-                device_tokens << "]"
-                
                 # Add the notification_item.name and item.name to SQS Queue
                 msg = queue.send_message("#{device_tokens}")
                 print '.'
@@ -100,8 +94,6 @@ module Schedule_C2DM_PushNotifications
             end
             
             if count > 0
-              device_tokens << "]"
-              
               # Add the notification_item.name and item.name to SQS Queue
               msg = queue.send_message("#{device_tokens}")
               print '.'
