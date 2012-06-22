@@ -80,7 +80,7 @@ module Schedule_C2DM_PushNotifications
        	    count = 0
        	    device_tokens = ""
             page.each do |item|
-              device_tokens << "#{item.attributes['c2dm_registration_id'].values.first},"
+              device_tokens << "#{item.attributes['c2dm_registration_id'].first},"
               count = count + 1
               
               if count == 50
