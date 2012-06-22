@@ -24,7 +24,7 @@ module Schedule_C2DM_PushNotifications
   
   # Execute the job
   def self.perform
-    domain = SimpleDB.get_domain(SimpleDB.domain_for_ios_notification)
+    domain = SimpleDB.get_domain(SimpleDB.domain_for_notification)
   
     unless domain.nil?
       notification_item = Schedule_C2DM_PushNotifications.get_pending_notification(domain)
@@ -57,10 +57,10 @@ module Schedule_C2DM_PushNotifications
         end
         
         device_domain =  SimpleDB.get_domain(bundle_identifier)
-        active_token_items = device_domain.items.where(:active => true)
+        active_token_items = device_domain.items.select('c2dm_registration_id').where(:active => true)
 
         page = active_token_items.page(:per_page => 2500)
-        queue_domain = SimpleDB.get_domain(SimpleDB.domain_for_ios_notification_queues)
+        queue_domain = SimpleDB.get_domain(SimpleDB.domain_for_notification_queues)
         
         # This is the case when there is an array of active items
         if page.is_a?(Array) && !queue_domain.nil?

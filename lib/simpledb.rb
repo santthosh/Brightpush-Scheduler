@@ -4,12 +4,12 @@ require 'yaml'
 # Helper class to manage simple_db
 class SimpleDB
   
-  def self.domain_for_ios_notification
+  def self.domain_for_notification
     config = YAML.load_file("config/aws.yml")
     return config[ENV['RACK_ENV']]["notifications_domain"]
   end
   
-  def self.domain_for_ios_notification_queues
+  def self.domain_for_notification_queues
     config = YAML.load_file("config/aws.yml")
     return config[ENV['RACK_ENV']]["notifications_queues_domain"]
   end
