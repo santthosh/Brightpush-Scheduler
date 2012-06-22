@@ -7,10 +7,10 @@ describe "SimpleDB" do
   end
   
   it "should provide domain for notification queues" do
-    SimpleDB.method_defined?(:domain_for_ios_notification_queues)
+    SimpleDB.method_defined?(:domain_for_notification_queues)
   end
   
   it "should provide domain for notifications" do
-    SimpleDB.method_defined?(:domain_for_ios_notification)
+    SimpleDB.method_defined?(:domain_for_notification)
   end
 end
