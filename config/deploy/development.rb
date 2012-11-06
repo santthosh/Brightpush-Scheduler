@@ -4,4 +4,4 @@ role :web, "ec2-50-112-211-178.us-west-2.compute.amazonaws.com"                 
 role :app, "ec2-50-112-211-178.us-west-2.compute.amazonaws.com"                          # This may be the same as your `Web` server
 
 ssh_options[:user] = "ubuntu"
-ssh_options[:keys] = ["/data/ops/aws-keys/us-west-oregon/brightpush-workers.pem"]
+ssh_options[:keys] = ["/data/ops/alpha/aws-keys/us-west-oregon/brightpush-workers.pem"]
