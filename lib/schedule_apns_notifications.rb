@@ -30,10 +30,11 @@ module Schedule_APNS_PushNotifications
       notification_item = Schedule_APNS_PushNotifications.get_pending_notification(domain)
       
       schedule_identifier = SecureRandom.uuid
-      puts "scheduler_id = #{schedule_identifier}"
       
       # if there is a notification to schedule, start, else exit
       unless notification_item.nil?
+        
+        puts "Starting iOS Push with scheduler_id = #{schedule_identifier} for #{notification_item.attributes['message']}"
         
         # Set the scheduler_id in com.apple.notification
         Schedule_APNS_PushNotifications.set_notification_status(notification_item,"scheduling",schedule_identifier)
@@ -114,6 +115,8 @@ module Schedule_APNS_PushNotifications
         
         # After all the records have been scheduled, set the status in com.apple.notification.queues
         Schedule_APNS_PushNotifications.set_notification_status(notification_item,"scheduled")
+        
+        puts "Scheduling completed for iOS Push with scheduler_id = #{schedule_identifier}"
       end
     end
   end
