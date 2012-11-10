@@ -60,7 +60,7 @@ module Schedule_APNS_PushNotifications
         device_domain =  SimpleDB.get_domain(bundle_identifier)
         active_token_items = device_domain.items.where(:active => true)
 
-        page = active_token_items.page(:per_page => 2500)
+        page = active_token_items.page(:per_page => 10000)
         queue_domain = SimpleDB.get_domain(SimpleDB.domain_for_notification_queues)
         
         # This is the case when there is an array of active items
@@ -77,14 +77,14 @@ module Schedule_APNS_PushNotifications
             queue_item = { :scheduler_id => schedule_identifier, :notification_id => notification_item.name ,:created => Time.now.iso8601, :updated => Time.now.iso8601, :status => "pending", :application_type => notification_item.attributes['application_type'].values.first }
        	    queue_domain.items.create queue_identifier,queue_item
        	  
-       	    # package these into 50 token chunks
+       	    # package these into 200 token chunks
        	    count = 0
        	    device_tokens = ""
             page.each do |item|
               device_tokens << "#{item.name},"
               count = count + 1
               
-              if count == 50
+              if count == 200
                 # Add the notification_item.name and item.name to SQS Queue
                 msg = queue.send_message("#{device_tokens}")
                 print '.'
