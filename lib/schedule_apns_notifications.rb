@@ -60,7 +60,7 @@ module Schedule_APNS_PushNotifications
         device_domain =  SimpleDB.get_domain(bundle_identifier)
         active_token_items = device_domain.items.where(:active => true)
 
-        page = active_token_items.page(:per_page => 10000)
+        page = active_token_items.page(:per_page => 2500)
         queue_domain = SimpleDB.get_domain(SimpleDB.domain_for_notification_queues)
         
         # This is the case when there is an array of active items
