@@ -1,8 +1,10 @@
 import 'lib/simpledb.rb'
 import 'lib/sqs.rb'
+require 'resque-status'
 
 # Schedule a whole bunch of push notifications
-module Schedule_APNS_PushNotifications
+class Schedule_APNS_PushNotifications
+    include Resque::Plugins::Status
   @queue = :scheduler
   
   # Set the status of the notification in SimpleDB
@@ -23,8 +25,10 @@ module Schedule_APNS_PushNotifications
   end
   
   # Execute the job
-  def self.perform
+  def perform
     domain = SimpleDB.get_domain(SimpleDB.domain_for_notification)
+    
+    tick()
   
     unless domain.nil?
       notification_item = Schedule_APNS_PushNotifications.get_pending_notification(domain)
@@ -57,9 +61,14 @@ module Schedule_APNS_PushNotifications
           bundle_identifier << ".debug"
         end
         
+        tick()
+        
         device_domain =  SimpleDB.get_domain(bundle_identifier)
         active_token_items = device_domain.items.where(:active => true)
 
+        total = active_token_items.count
+        scheduled_count = 0
+        
         page = active_token_items.page(:per_page => 2500)
         queue_domain = SimpleDB.get_domain(SimpleDB.domain_for_notification_queues)
         
@@ -67,6 +76,8 @@ module Schedule_APNS_PushNotifications
         if page.is_a?(Array) && !queue_domain.nil?
           last_page = false
           until last_page
+            tick()
+                
             queue_identifier = SecureRandom.uuid
             puts "queue_id = #{queue_identifier}"
             
@@ -83,11 +94,14 @@ module Schedule_APNS_PushNotifications
             page.each do |item|
               device_tokens << "#{item.name},"
               count = count + 1
+              scheduled_count = scheduled_count + 1
               
               if count == 200
                 # Add the notification_item.name and item.name to SQS Queue
                 msg = queue.send_message("#{device_tokens}")
                 print '.'
+                # Update resque-status
+                at(scheduled_count,total,"scheduling completed for #{queue_identifier}")
                 
                 device_tokens = ""
                 count = 0
@@ -98,6 +112,8 @@ module Schedule_APNS_PushNotifications
               # Add the notification_item.name and item.name to SQS Queue
               msg = queue.send_message("#{device_tokens}")
               print '.'
+              # Update resque-status
+              at(scheduled_count,total,"scheduling completed for #{queue_identifier}")
               
               device_tokens = ""
               count = 0
@@ -117,6 +133,8 @@ module Schedule_APNS_PushNotifications
         Schedule_APNS_PushNotifications.set_notification_status(notification_item,"scheduled")
         
         puts "Scheduling completed for iOS Push with scheduler_id = #{schedule_identifier}"
+      else 
+        at(1,1,"No pending APNS notifications to be scheduled")
       end
     end
   end
