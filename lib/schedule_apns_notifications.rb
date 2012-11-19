@@ -24,6 +24,10 @@ class Schedule_APNS_PushNotifications
     return results.first;
   end
   
+  def name
+    return "Schedule Apple Push Notifications"
+  end
+  
   # Execute the job
   def perform
     domain = SimpleDB.get_domain(SimpleDB.domain_for_notification)
