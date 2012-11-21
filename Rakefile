@@ -28,6 +28,8 @@ namespace :resque do
     # Setup the shared redis server
     Resque.redis = $redis
     Resque.redis.namespace = "resque"
+    Resque.logger = Logger.new("log/scheduler.log",'daily')
+    Resque.logger.level = Logger::INFO
   end
 end
 

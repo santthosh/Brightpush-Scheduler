@@ -42,7 +42,7 @@ class Schedule_APNS_PushNotifications
       # if there is a notification to schedule, start, else exit
       unless notification_item.nil?
         
-        puts "Starting iOS Push with scheduler_id = #{schedule_identifier} for #{notification_item.attributes['message']}"
+        Resque.logger.info("Starting iOS Push with scheduler_id = #{schedule_identifier} for #{notification_item.attributes['message']}")
         
         # Set the scheduler_id in com.apple.notification
         Schedule_APNS_PushNotifications.set_notification_status(notification_item,"scheduling",schedule_identifier)
@@ -53,8 +53,8 @@ class Schedule_APNS_PushNotifications
         # Read the scheduler_id, if it is the same set status to scheduling 
         #  -- if not quit (this means some other worker has started working)
         if schedule_identifier.to_s != notification_item.attributes['scheduler_id'].values.first.to_s
-          puts "scheduler_id(#{schedule_identifier}) mismatch with 
-                notification_item.scheduler_id(#{notification_item.attributes['scheduler_id'].values.first})"
+          Resque.logger.info("scheduler_id(#{schedule_identifier}) mismatch with 
+                notification_item.scheduler_id(#{notification_item.attributes['scheduler_id'].values.first})")
           return
         end
         
@@ -83,7 +83,7 @@ class Schedule_APNS_PushNotifications
             tick()
                 
             queue_identifier = SecureRandom.uuid
-            puts "queue_id = #{queue_identifier}"
+            Resque.logger.info("queue_id = #{queue_identifier}")
             
             # For each page, create separate SQS queue 
             queue = SQS.create_queue(queue_identifier)
@@ -115,15 +115,12 @@ class Schedule_APNS_PushNotifications
             if count > 0
               # Add the notification_item.name and item.name to SQS Queue
               msg = queue.send_message("#{device_tokens}")
-              print '.'
               # Update resque-status
               at(scheduled_count,total,"scheduling completed for #{queue_identifier}")
               
               device_tokens = ""
               count = 0
             end
-            
-            puts " "
             
             if page.last_page?
               last_page = true
@@ -136,7 +133,7 @@ class Schedule_APNS_PushNotifications
         # After all the records have been scheduled, set the status in com.apple.notification.queues
         Schedule_APNS_PushNotifications.set_notification_status(notification_item,"scheduled")
         
-        puts "Scheduling completed for iOS Push with scheduler_id = #{schedule_identifier}"
+        Resque.logger.info("Scheduling completed for iOS Push with scheduler_id = #{schedule_identifier}")
       else 
         at(1,1,"No pending APNS notifications to be scheduled")
       end
