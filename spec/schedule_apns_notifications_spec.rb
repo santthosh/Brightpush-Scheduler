@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'resque-status'
 require File.dirname(__FILE__) + '/../lib/schedule_apns_notifications.rb'
 
 describe "Schedule_APNS_PushNotifications" do
